@@ -33,7 +33,7 @@ setup(
             'calibtools-undistort = calibtools.undistort:start',
         ]
     },
-    licence = 'MIT',
+    license = 'MIT',
     install_requires = [
         'moviepy', 'numpy', 'docopt',
     ],

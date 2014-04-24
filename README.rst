@@ -6,9 +6,9 @@ This is a very incomplete set of tools for camera calibration.
 Requirements
 ~~~~~~~~~~~~
 
-  * OpenCV's Python Bindings
-  * moviepy
-  * numpy
+* OpenCV's Python Bindings
+* moviepy
+* numpy
 
 Usage
 ~~~~~

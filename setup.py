@@ -1,3 +1,4 @@
+import os
 from setuptools import setup, find_packages
 
 from calibtools import __version__ as version

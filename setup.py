@@ -2,10 +2,14 @@ from setuptools import setup, find_packages
 
 from calibtools import __version__ as version
 
+def read(fname):
+    return open(os.path.join(os.path.dirname(__file__), fname)).read()
+
 setup(
     name = 'calibtools',
     version = version,
     description = 'Camera calibration tools for Python',
+    long_description = read('README.rst'),
     author = 'Rich Wareham',
     author_email = 'rich.calibtools@richwareham.com',
     url = 'https://github.com/rjw57/calibtools/',

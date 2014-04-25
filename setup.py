@@ -29,8 +29,7 @@ setup(
     packages = find_packages(),
     entry_points = {
         'console_scripts': [
-            'calibtools-calib = calibtools.calib:start',
-            'calibtools-undistort = calibtools.undistort:start',
+            'calibtools = calibtools.tool:main',
         ]
     },
     license = 'MIT',

@@ -28,3 +28,11 @@ webcam, one can use:
     $ ffmpeg -f video4linux2 -input_format mjpeg -s 1280x720 -r 30 -i /dev/video1 \
         -vcodec rawvideo -f rawvideo -pix_fmt rgb24 - \
         | calibtools calib raw:1280x720 -v -o foo.json
+
+To convert undistorted video on the fly, one can use:
+
+.. code-block:: console
+
+    $ calibtools undistort calibration.json video.mp4 - | ffmpeg -y -f rawvideo \
+        -pix_fmt rgb24 -s 1920x1080 -i - -r 30 output.mp4
+

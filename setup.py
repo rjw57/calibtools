@@ -5,16 +5,6 @@ from setuptools import setup, find_packages
 
 from calibtools import __version__ as version
 
-try:
-    import cv2
-    HAVE_OPENCV=True
-except ImportError:
-    HAVE_OPENCV=False
-
-if not HAVE_OPENCV:
-    sys.stderr.write("OpenCV's Python binding is required for calibtools\n")
-    sys.exit(1)
-
 def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
 

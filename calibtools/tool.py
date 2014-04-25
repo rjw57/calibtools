@@ -42,7 +42,6 @@ Undistort options:
                             format as output by calibtools calib.
 
 Specifying video input:
-
     When specifying video input (e.g. via <video>) one can use the filename of
     any file in format which OpenCV can understand. If one uses the form
     device:NUMBER then NUMBER is used as a a live video capture device number

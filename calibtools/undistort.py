@@ -32,11 +32,14 @@ def tool(calibration, video, output, start=None, duration=None):
     vc = open_video(video)
     try:
         fps = vc.get(cv2.CAP_PROP_FPS)
+        if fps == 0:
+            fps = 25
     except AttributeError:
         fps = 25
 
     # Prepare output
-    vo = FFMPEG_VideoWriter(output, frame_size, fps, 'png', '18M')
+    vo = FFMPEG_VideoWriter(output, frame_size, fps, 'png',
+            logfile=sys.stderr)
 
     for frame_idx in itertools.count(0):
         flag, frame = vc.read()
@@ -49,10 +52,7 @@ def tool(calibration, video, output, start=None, duration=None):
         if duration is not None and frame_idx >= start + duration:
             break
 
-        if frame_idx % 100 == 0:
-            logging.info('Processing frame {0}...'.format(frame_idx))
-        else:
-            logging.debug('Processing frame {0}...'.format(frame_idx))
+        logging.debug('Processing frame {0}...'.format(frame_idx))
 
         # Undistort
         output = cv2.remap(frame, map1, map2, cv2.INTER_LINEAR)

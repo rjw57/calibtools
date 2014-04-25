@@ -267,3 +267,16 @@ texinfo_documents = [
 
 # If true, do not generate a @detailmenu in the "Top" node's menu.
 #texinfo_no_detailmenu = False
+
+# -- Local directives -----------------------------------------------------
+
+import sphinx.ext.autodoc
+
+class LiteralDocstringDocumenter(sphinx.ext.autodoc.ModuleDocumenter):
+    objtype = 'literal'
+    content_indent = u'    '
+    def add_directive_header(self, sig):
+        self.add_line(u'::', '<autodoc>')
+
+def setup(app):
+    app.add_autodocumenter(LiteralDocstringDocumenter)

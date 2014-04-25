@@ -1,22 +1,11 @@
-.. calibtools documentation master file, created by
-   sphinx-quickstart on Fri Apr 25 13:33:48 2014.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+calibtools: a camera calibration toolbox
+========================================
 
-Welcome to calibtools's documentation!
-======================================
+The calibtools utlity
+---------------------
 
-Contents:
+The calibtools package provides one command-line utility which is named,
+unimaginatively, ``calibtools``. The command-line interface documentation is
+reproduced below:
 
-.. toctree::
-   :maxdepth: 2
-
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
-
+.. autoliteral:: calibtools.tool

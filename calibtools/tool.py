@@ -20,7 +20,9 @@ Common options:
     --duration=NUMBER       Read at most NUMBER frames from input.
 
     <video>                 Read input frames from <video>. This must be in a
-                            format which OpenCV can understand.
+                            format which OpenCV can understand. If <video> is
+                            of the form device:NUMBER then NUMBER is used as a
+                            a live video capture device number starting from 0.
 
 Calibration options:
     --skip=NUMBER           Only process every NUMBER-th frame. Note that this
@@ -135,3 +137,5 @@ def main():
 
 if __name__ == '__main__':
     sys.exit(main())
+
+# vim:colorcolumn=81

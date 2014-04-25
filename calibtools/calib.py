@@ -11,6 +11,10 @@ log = logging.getLogger(__name__)
 def tool(video, cb_shape, skip=None, output=None, start=None, duration=None):
     # Load input video
     log.debug('Processing {0}...'.format(video))
+
+    if video.startswith('device:'):
+        video = int(video[7:])
+        log.debug('Using capture device {0}...'.format(video))
     vc = cv2.VideoCapture(video)
 
     # Parse chessboard shape

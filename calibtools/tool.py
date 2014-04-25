@@ -20,10 +20,8 @@ Common options:
     --start=INDEX           Start processing from frame INDEX (0-based).
     --duration=NUMBER       Read at most NUMBER frames from input.
 
-    <video>                 Read input frames from <video>. This must be in a
-                            format which OpenCV can understand. If <video> is
-                            of the form device:NUMBER then NUMBER is used as a
-                            a live video capture device number starting from 0.
+    <video>                 Read input frames from <video>. See section on
+                            specifying video input below.
 
 Calibration options:
     --skip=NUMBER           Only process every NUMBER-th frame. Note that this
@@ -42,6 +40,16 @@ Calibration options:
 Undistort options:
     <calibration>           A file containing calibration information in JSON
                             format as output by calibtools calib.
+
+Specifying video input:
+
+    When specifying video input (e.g. via <video>) one can use the filename of
+    any file in format which OpenCV can understand. If one uses the form
+    device:NUMBER then NUMBER is used as a a live video capture device number
+    starting from 0. If one uses the form raw:WxH then raw RGB24 frames of
+    width W and height H will be read from standard input. This is particularly
+    useful if one wants to use ffmpeg to pipe in video from some capture
+    device or video format not known to OpenCV.
 
 """
 import functools

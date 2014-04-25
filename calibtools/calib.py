@@ -6,6 +6,8 @@ import sys
 import cv2
 import numpy as np
 
+from calibtools.util import open_video
+
 log = logging.getLogger(__name__)
 
 def corner_shape_parameters(corners, frame_shape, cb_shape):
@@ -63,12 +65,7 @@ def corner_shape_parameters(corners, frame_shape, cb_shape):
 def tool(video, cb_shape, autostop=True, skip=None, output=None, start=None,
         duration=None, threshold=None):
     # Load input video
-    log.debug('Processing {0}...'.format(video))
-
-    if video.startswith('device:'):
-        video = int(video[7:])
-        log.debug('Using capture device {0}...'.format(video))
-    vc = cv2.VideoCapture(video)
+    vc = open_video(video)
 
     # Parse chessboard shape
     if len(cb_shape) != 2:

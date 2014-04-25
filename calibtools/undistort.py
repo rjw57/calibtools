@@ -7,6 +7,8 @@ import cv2
 from moviepy.video.io.ffmpeg_writer import FFMPEG_VideoWriter
 import numpy as np
 
+from calibtools.util import open_video
+
 def tool(calibration, video, output, start=None, duration=None):
     start = start or 0
 
@@ -27,9 +29,11 @@ def tool(calibration, video, output, start=None, duration=None):
             cv2.CV_16SC2)
 
     # Load input video
-    logging.debug('Processing {0}...'.format(video))
-    vc = cv2.VideoCapture(video)
-    fps = vc.get(cv2.CAP_PROP_FPS)
+    vc = open_video(video)
+    try:
+        fps = vc.get(cv2.CAP_PROP_FPS)
+    except AttributeError:
+        fps = 25
 
     # Prepare output
     vo = FFMPEG_VideoWriter(output, frame_size, fps, 'png', '18M')

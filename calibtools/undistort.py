@@ -9,11 +9,13 @@ import numpy as np
 
 from calibtools.util import open_video
 
+log = logging.getLogger(__name__)
+
 def tool(calibration, video, output, start=None, duration=None):
     start = start or 0
 
     # Load calibration
-    logging.debug('Loading calibration from {0}...'.format(calibration))
+    log.info('Loading calibration from {0}...'.format(calibration))
     calibration = json.load(open(calibration))
     cam_matrix = np.asarray(calibration['output']['camMatrix'])
     dist_coeffs = np.asarray(calibration['output']['distCoeffs'])
@@ -30,17 +32,9 @@ def tool(calibration, video, output, start=None, duration=None):
 
     # Load input video
     vc = open_video(video)
-    try:
-        fps = vc.get(cv2.CAP_PROP_FPS)
-        if fps == 0:
-            fps = 25
-    except AttributeError:
-        fps = 25
 
     # Prepare output
-    vo = FFMPEG_VideoWriter(output, frame_size, fps, 'png',
-            logfile=sys.stderr)
-
+    vo = open(output, 'wb') if output != '-' else sys.stdout.buffer
     for frame_idx in itertools.count(0):
         flag, frame = vc.read()
         if not flag:
@@ -52,13 +46,13 @@ def tool(calibration, video, output, start=None, duration=None):
         if duration is not None and frame_idx >= start + duration:
             break
 
-        logging.debug('Processing frame {0}...'.format(frame_idx))
+        log.debug('Processing frame {0}...'.format(frame_idx))
 
         # Undistort
         output = cv2.remap(frame, map1, map2, cv2.INTER_LINEAR)
 
-        # Note that OpenCV and FFMPEG differ on ordering of components
-        vo.write_frame(output[:,:,::-1])
+        # We need to do color space conversion due to OpenCV's ordering
+        vo.write(cv2.cvtColor(output, cv2.COLOR_RGB2BGR).tostring())
 
     vo.close()
 

@@ -2,20 +2,16 @@
 Usage:
     calibtools (-h | --help) | --version
     calibtools calib [-v... | --verbose...] [--start=INDEX] [--duration=NUMBER]
-        [--skip=NUMBER] [-o FILE | --output=FILE] [--shape=WxH]
-        [--threshold=NUMBER] [--no-stop] <video>
+        [--skip=NUMBER] [--shape=WxH] [--threshold=NUMBER]
+        [--no-stop] <video> [<output>]
     calibtools undistort [-v... | --verbose...] [--start=INDEX]
-        [--duration=NUMBER] (-o FILE | --output=FILE) <calibration> <video>
+        [--duration=NUMBER] <calibration> <video> <output>
 
 Common options:
     -h --help               Show a command line usage summary.
     -v --verbose            Be verbose in logging progress. Repeat to increase
                             verbosity.
     --version               Output this tool's version number.
-
-    -o FILE --output=FILE   Write output to FILENAME. The default behaviour is
-                            to write to standard output unless noted otherwise
-                            in an individual command's documentation.
 
     --start=INDEX           Start processing from frame INDEX (0-based).
     --duration=NUMBER       Read at most NUMBER frames from input.
@@ -36,10 +32,15 @@ Calibration options:
                             all boards save the first one. [default: 0.2]
     --no-stop               Don't automatically stop processing when enough
                             variation in board shape has been observed.
+    <output>                Write calibration output in JSON format to <output>.
+                            The default behaviour is to write to standard
+                            output.
 
 Undistort options:
     <calibration>           A file containing calibration information in JSON
                             format as output by calibtools calib.
+    <output>                Write raw RGB24 formatted output frames to <output>.
+                            Use - to explicitly specify standard output.
 
 Specifying video input:
     When specifying video input (e.g. via <video>) one can use the filename of
@@ -98,7 +99,7 @@ def calib(opts):
             'duration':     parse(opts['--duration'], int, 'duration'),
             'skip':         parse(opts['--skip'], int, 'frame skip'),
             'threshold':    parse(opts['--threshold'], float, 'threshold'),
-            'output':       opts['--output'],
+            'output':       opts['<output>'],
         }
         video = opts['<video>']
         autostop = not parse(opts['--no-stop'], bool, 'no stop flag')
@@ -117,7 +118,7 @@ def undistort(opts):
             'duration': parse(opts['--duration'], int, 'duration'),
         }
         video = opts['<video>']
-        output = opts['--output']
+        output = opts['<output>']
         calibration = opts['<calibration>']
     except ValueError:
         return 1

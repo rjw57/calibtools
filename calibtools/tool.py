@@ -2,7 +2,8 @@
 Usage:
     calibtools (-h | --help) | --version
     calibtools calib [-v... | --verbose...] [--start=INDEX] [--duration=NUMBER]
-        [--skip=NUMBER] [-o FILE | --output=FILE] [--shape=WxH] <video>
+        [--skip=NUMBER] [-o FILE | --output=FILE] [--shape=WxH]
+        [--threshold=NUMBER] [--no-stop] <video>
     calibtools undistort [-v... | --verbose...] [--start=INDEX]
         [--duration=NUMBER] (-o FILE | --output=FILE) <calibration> <video>
 
@@ -28,9 +29,15 @@ Calibration options:
     --skip=NUMBER           Only process every NUMBER-th frame. Note that this
                             does not affect the interpretation of --duration. A
                             skip of 10 frames with a duration of 20 will result
-                            in 2 frames of output. [default: 10]
+                            in 2 frames of output. [default: 1]
     --shape=WxH             Checkerboard has WxH internal corners.
                             [default: 8x6]
+    --threshold=NUMBER      Skip boards which are not different by NUMBER from
+                            what we have previously seen. A value of 0 will
+                            include all boards and a value of 1 will *ignore*
+                            all boards save the first one. [default: 0.2]
+    --no-stop               Don't automatically stop processing when enough
+                            variation in board shape has been observed.
 
 Undistort options:
     <calibration>           A file containing calibration information in JSON
@@ -80,16 +87,18 @@ def calib(opts):
 
     try:
         kwargs = {
-            'start':    parse(opts['--start'], int, 'starting index'),
-            'duration': parse(opts['--duration'], int, 'duration'),
-            'skip':     parse(opts['--skip'], int, 'frame skip'),
-            'output':   opts['--output'],
+            'start':        parse(opts['--start'], int, 'starting index'),
+            'duration':     parse(opts['--duration'], int, 'duration'),
+            'skip':         parse(opts['--skip'], int, 'frame skip'),
+            'threshold':    parse(opts['--threshold'], float, 'threshold'),
+            'output':       opts['--output'],
         }
         video = opts['<video>']
+        autostop = not parse(opts['--no-stop'], bool, 'no stop flag')
     except ValueError:
         return 1
 
-    return tool(video, cb_shape, **kwargs)
+    return tool(video, cb_shape, autostop=autostop, **kwargs)
 
 @subcommand
 def undistort(opts):
